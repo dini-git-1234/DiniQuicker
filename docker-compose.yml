@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  server:
+    environment:
+        - PYTHONUNBUFFERED=1
+        - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+        - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    build:
+      context: ./server/app
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server/app:/app
+      - ./server/app/files:/app/files
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+    depends_on:
+      - server

@@ -1,0 +1,70 @@
+import React, { useState, useEffect } from 'react';
+
+const Gov_Map = ({ city, street, houseNumber }) => {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    // טעינת ספריית Govmap פעם אחת ויצירת המפה
+    if (!window.govmap) {
+      const script = document.createElement('script');
+
+      window.initMap = () => {
+        window.govmap.createMap('map', {
+          token: import.meta.env.VITE_GOVMAP_TOKEN,
+          layers: [],
+          showNavButtons: true,
+          level: 10,
+          center: { x: 180000, y: 660000 }
+        });
+        setIsReady(true);
+      };
+
+      script.src = `https://www.govmap.gov.il/govmap/api/govmap.api.js?token=${import.meta.env.VITE_GOVMAP_TOKEN}&callback=initMap`;
+      script.async = true;
+      document.head.appendChild(script);
+    } else {
+      // אם הספרייה כבר נטענה בעבר, נניח שהמפה כבר קיימת
+      setIsReady(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    // בכל פעם שהכתובת מהטופס משתנה והמפה מוכנה – התמקדות בכתובת
+    if (!isReady || !window.govmap) return;
+    if (!city || !street || !houseNumber) return;
+    if (typeof window.govmap.geocodeAddress !== 'function') {
+      console.error("window.govmap.geocodeAddress לא מוגדרת ב-API הנוכחי, מדלג על ג׳אוקודינג.");
+      return;
+    }
+
+    const fullAddress = `${street} ${houseNumber}, ${city}`;
+
+    window.govmap.geocodeAddress({ address: fullAddress })
+      .then((response) => {
+        if (response && response.length > 0) {
+          const result = response[0];
+          const { x, y } = result;
+
+          window.govmap.zoomTo({ x, y, level: 8 });
+
+          window.govmap.displayGeometries({
+            wkts: [`POINT(${x} ${y})`],
+            geomType: 1,
+            showPopup: true,
+            labels: [fullAddress]
+          });
+        } else {
+          alert("הכתובת לא נמצאה.");
+        }
+      })
+      .catch((err) => console.error("Error searching address:", err));
+  }, [city, street, houseNumber, isReady]);
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <div id="map" style={{ width: '100%', height: '600px', border: '1px solid #ccc' }}></div>
+    </div>
+  );
+};
+
+export default Gov_Map;
