@@ -75,13 +75,15 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
     )
 
 
+frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:5173")
+
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=[frontend_url, "http://localhost:5173"], # רשימת הדומיינים המורשים
     allow_credentials=True,
-    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["Content-Disposition"],
+    expose_headers=["Content-Disposition", "Content-Length"], # חשיפת נתוני קובץ לקליינט
 )
 
 app.include_router(report.router, prefix="/report")
