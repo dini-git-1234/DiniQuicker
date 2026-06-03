@@ -20,11 +20,10 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=https://diniquickerserver.onrender.com
     ports:
-      - "80:5173"
+      - "80:80"
     volumes:
       - ./frontend:/app
       - /app/node_modules
-
-    depends_on:
-      - server

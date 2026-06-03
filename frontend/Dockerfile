@@ -10,6 +10,10 @@ RUN npm ci
 
 COPY . .
 
+# קבלת ארגומנט של משתנה הסביבה בזמן בנייה
+ARG VITE_API_URL=https://diniquickerserver.onrender.com
+ENV VITE_API_URL=$VITE_API_URL
+
 # בניית הקבצים הסטטיים של ראקט (יוצר תיקיית dist)
 RUN npm run build
 

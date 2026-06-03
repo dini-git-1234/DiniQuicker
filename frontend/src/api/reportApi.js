@@ -1,7 +1,7 @@
 // src/api/reportApi.js
 
-// שליפת כתובת השרת ממשתני הסביבה של הענן, עם ברירת מחדל ל-localhost עבור פיתוח מקומי
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+// שליפת כתובת השרת ממשתני הסביבה של הענן, עם ברירת מחדל לקישור החיצוני
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://diniquickerserver.onrender.com";
 
 export async function createReport(formData) {
     // החלפת localhost בכתובת הדינמית
