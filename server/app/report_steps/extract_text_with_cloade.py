@@ -27,7 +27,7 @@ IMAGE_MIME = {
 # מפתח API – עדיף מהסביבה
 ANTHROPIC_API_KEY = os.environ.get(
     "ANTHROPIC_API_KEY",
-    "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",
+    "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",
 )
 
 DEFAULT_SUMMARY_PROMPT = (
