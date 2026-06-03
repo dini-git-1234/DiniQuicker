@@ -24,11 +24,8 @@ IMAGE_MIME = {
     ".webp": "image/webp",
 }
 
-# מפתח API – עדיף מהסביבה
-ANTHROPIC_API_KEY = os.environ.get(
-    "ANTHROPIC_API_KEY",
-    "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",
-)
+# מפתח API חייב להגיע מהסביבה
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 
 DEFAULT_SUMMARY_PROMPT = (
     "הנחיה: קרא בעיון את תוכן הקובץ והחזר את המידע בצורה של טקסט טבעי בעברית, כפי שייכתב על ידי שמאי/עורך מקצועי.\n"
